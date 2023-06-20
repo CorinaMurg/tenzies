@@ -1,13 +1,5 @@
 /* eslint-disable react/prop-types */
 
-/**
- * Challenge: Add conditional styling to the Die component
- * so that if it's held (isHeld === true), its background color
- * changes to a light green (#59E391)
- * 
- * Remember: currently the Die component has no way of knowing
- * if it's "held" or not.
- */
 
 
 export default function Die(props) {
@@ -16,7 +8,11 @@ export default function Die(props) {
         backgroundColor: props.isHeld ? "#59E391" : "white"
     }
     return (
-        <div className="die-face" style = {styles}>
+        <div 
+            className="die-face" 
+            style = {styles} 
+            onClick={props.handleHold}
+        >
             <h2 className="die-num">{props.value}</h2>
         </div>
     )
