@@ -21,6 +21,7 @@ export default function App() {
       <main>
           <div className="dice-container">
               {diceElements}
+              <button onClick=>Roll</button>
           </div>
       </main>
   )
