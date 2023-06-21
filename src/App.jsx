@@ -39,20 +39,23 @@ export default function App() {
 
   function rollDice() {
     if(!tenzies) {
-      setDice(oldDice => oldDice.map(die => {
-        return die.isHeld ? 
-            die :
-            generateNewDie()
-    })) 
+        setDice(oldDice => oldDice.map(die => {
+            return die.isHeld ? 
+                die :
+                generateNewDie()
+        })) 
 
-    // Set the focus back to the first die
-    firstDieRef.current.focus();
+        // Set the focus to the first die after a roll
+        firstDieRef.current.focus();
 
     } else {
         setTenzies(false)
         setDice(allNewDice())
+        // Set the focus to the first die after "New Game" roll
+        firstDieRef.current.focus();
     }
   }
+  
       
   function holdDice(id) {
       setDice(oldDice => oldDice.map(die => {
@@ -75,8 +78,9 @@ export default function App() {
   return (
     <main>
         {tenzies && <Confetti />}
-        <h1 className="title">Tenzies</h1>
-        <p className="instructions">
+        <div aria-live="polite" className="visually-hidden">{tenzies ? "Congratulations, you won! Roll to play again" : ""}</div>
+        <h1 className="title" tabIndex="0">Tenzies</h1>
+        <p className="instructions" tabIndex="0">
           Roll until all dice are the same. 
           Click each die to freeze it at its current value between rolls.
         </p>
