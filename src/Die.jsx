@@ -8,6 +8,8 @@ export default function Die(props) {
     }
     return (
         <div 
+            tabIndex="0"
+            aria-label={`Die with a value of ${props.value}. ${props.isHeld ? "Frozen" : "Not frozen"}`}
             className="die-face" 
             style = {styles} 
             onClick={props.handleHold}
