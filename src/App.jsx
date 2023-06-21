@@ -1,21 +1,15 @@
-// EXTRA FEATURES TO ADD:
-// add dots to each die with css
-// track the number of rolls
-// track the time it took to win
-// save best time in localStorage
 
-
-
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {nanoid} from "nanoid"
 import Confetti from "react-confetti"
 import Die from "./Die"
 import './App.css'
 
 export default function App() {
+  // Ref for the first die
+  const firstDieRef = useRef(null);
 
   const [dice, setDice] = useState(allNewDice())
-
   const [tenzies, setTenzies] = useState(false)
 
   useEffect(() => {
@@ -27,27 +21,6 @@ export default function App() {
     }
   }, [dice])
 
-  // useEffect(() => {
-  //   let countHeld = 0
-  //   for (let i in dice) {
-  //     if (dice[i].isHeld === true) {
-  //       countHeld ++
-  //     }
-  //   }
-
-  //   let countValue = 0
-  //   const firstValue = dice[0].value
-  //   for (let j in dice) {
-  //     if (dice[j].value === firstValue) {
-  //       countValue ++
-  //     }
-  //   }
-
-  //   if (countHeld === 10 && countValue === 10) {
-  //     setTenzies(true)
-  //   }
-  // }, [dice])
-  
   function generateNewDie() {
       return {
           value: Math.ceil(Math.random() * 6),
@@ -71,13 +44,16 @@ export default function App() {
             die :
             generateNewDie()
     })) 
+
+    // Set the focus back to the first die
+    firstDieRef.current.focus();
+
     } else {
         setTenzies(false)
         setDice(allNewDice())
     }
   }
       
-  
   function holdDice(id) {
       setDice(oldDice => oldDice.map(die => {
           return die.id === id ? 
@@ -86,33 +62,33 @@ export default function App() {
       }))
   }
 
-  
-  const diceElements = dice.map(die => (
-      <Die 
-          key={die.id} 
-          value={die.value} 
-          isHeld={die.isHeld} 
-          handleHold={() => holdDice(die.id)}
-      />
+  const diceElements = dice.map((die, index) => (
+    <Die 
+      key={die.id} 
+      value={die.value} 
+      isHeld={die.isHeld} 
+      handleHold={() => holdDice(die.id)}
+      ref={index === 0 ? firstDieRef : null}  // assign the ref to the first die
+    />
   ))
   
   return (
-      <main>
-          {tenzies && <Confetti />}
-          <h1 className="title">Tenzies</h1>
-          <p className="instructions">
-            Roll until all dice are the same. 
-            Click each die to freeze it at its current value between rolls.
-          </p>
-          <div className="dice-container">
-              {diceElements}
-          </div>
-          <button 
-            className="roll-dice" 
-            onClick={rollDice}
-          >
-              {tenzies ? "New Game" : "Roll"}
-          </button>
-      </main>
+    <main>
+        {tenzies && <Confetti />}
+        <h1 className="title">Tenzies</h1>
+        <p className="instructions">
+          Roll until all dice are the same. 
+          Click each die to freeze it at its current value between rolls.
+        </p>
+        <div className="dice-container">
+            {diceElements}
+        </div>
+        <button 
+          className="roll-dice" 
+          onClick={rollDice}
+        >
+            {tenzies ? "New Game" : "Roll"}
+        </button>
+    </main>
   )
 }

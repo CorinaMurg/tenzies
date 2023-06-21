@@ -1,8 +1,9 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 
+import { forwardRef } from 'react';
 
-export default function Die(props) {
-
+const Die = forwardRef((props, ref) => {
     const styles = {
         backgroundColor: props.isHeld ? "#FCBA28" : "white"
     }
@@ -13,8 +14,11 @@ export default function Die(props) {
             className="die-face" 
             style = {styles} 
             onClick={props.handleHold}
+            ref={ref}
         >
             <h2 className="die-num">{props.value}</h2>
         </div>
     )
-}
+})
+
+export default Die;
