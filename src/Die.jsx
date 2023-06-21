@@ -8,7 +8,7 @@ const Die = forwardRef((props, ref) => {
         backgroundColor: props.isHeld ? "#FCBA28" : "white"
     }
     return (
-        <div 
+        <button 
             tabIndex="0"
             aria-label={`Die with a value of ${props.value}. ${props.isHeld ? "Frozen" : "Not frozen"}`}
             className="die-face" 
@@ -17,7 +17,7 @@ const Die = forwardRef((props, ref) => {
             ref={ref}
         >
             <h2 className="die-num">{props.value}</h2>
-        </div>
+        </button>
     )
 })
 
