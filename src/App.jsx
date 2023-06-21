@@ -1,3 +1,10 @@
+// EXTRA FEATURES TO ADD:
+// add dots to each die with css
+// track the number of rolls
+// track the time it took to win
+// save best time in localStorage
+
+
 
 import { useState, useEffect } from 'react'
 import {nanoid} from "nanoid"
@@ -12,25 +19,34 @@ export default function App() {
   const [tenzies, setTenzies] = useState(false)
 
   useEffect(() => {
-    let countHeld = 0
-    for (let i in dice) {
-      if (dice[i].isHeld === true) {
-        countHeld ++
-      }
-    }
-
-    let countValue = 0
+    const allHeld = dice.every(die => die.isHeld)
     const firstValue = dice[0].value
-    for (let j in dice) {
-      if (dice[j].value === firstValue) {
-        countValue ++
-      }
+    const allSameValue = dice.every(die => die.value === firstValue)
+    if (allHeld && allSameValue) {
+        setTenzies(true)
     }
+  }, [dice])
 
-    if (countHeld === 10 && countValue === 10) {
-      setTenzies(true)
-    }
-}, [dice])
+  // useEffect(() => {
+  //   let countHeld = 0
+  //   for (let i in dice) {
+  //     if (dice[i].isHeld === true) {
+  //       countHeld ++
+  //     }
+  //   }
+
+  //   let countValue = 0
+  //   const firstValue = dice[0].value
+  //   for (let j in dice) {
+  //     if (dice[j].value === firstValue) {
+  //       countValue ++
+  //     }
+  //   }
+
+  //   if (countHeld === 10 && countValue === 10) {
+  //     setTenzies(true)
+  //   }
+  // }, [dice])
   
   function generateNewDie() {
       return {
