@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react'
 import {nanoid} from "nanoid"
 import Confetti from "react-confetti"
@@ -6,7 +5,8 @@ import Die from "./Die"
 import './App.css'
 
 export default function App() {
-  const firstDieRef = useRef(null)
+  
+  const firstUnheldDieRef = useRef(null)
   const [dice, setDice] = useState(allNewDice())
   const [tenzies, setTenzies] = useState(false)
 
@@ -36,21 +36,32 @@ export default function App() {
   }
 
   function rollDice() {
-    if(!tenzies) {
-        setDice(oldDice => oldDice.map(die => {
-            return die.isHeld ? 
-                die :
-                generateNewDie()
-        }))   
+    let firstUnheldFound = false;
 
-    } else {
-        setTenzies(false)
-        setDice(allNewDice())
+    setDice(oldDice => oldDice.map(die => {
+        if(!firstUnheldFound && !die.isHeld) {
+            firstUnheldFound = true;
+            return {
+                ...generateNewDie(),
+                isFirstUnheld: true,
+            };
+        } else {
+            return {
+                ...(die.isHeld ? die : {...generateNewDie(), isFirstUnheld: false}),
+            };
+        }
+    }));
+
+    if(firstUnheldDieRef.current) {
+        firstUnheldDieRef.current.focus();
     }
-    // Set the focus to the first die after a roll
-    firstDieRef.current.focus();
+
+    if(tenzies) {
+        setTenzies(false);
+    }
   }
-  
+
+      
   function holdDice(id) {
       setDice(oldDice => oldDice.map(die => {
           return die.id === id ? 
@@ -59,13 +70,14 @@ export default function App() {
       }))
   }
 
-  const diceElements = dice.map((die, index) => (
+  const diceElements = dice.map((die) => (
     <Die 
       key={die.id} 
       value={die.value} 
       isHeld={die.isHeld} 
       handleHold={() => holdDice(die.id)}
-      ref={index === 0 ? firstDieRef : null}  // assign the ref to the first die
+      isFirstUnheld={die.isFirstUnheld}
+      ref={firstUnheldDieRef}
     />
   ))
   
@@ -91,3 +103,7 @@ export default function App() {
     </main>
   )
 }
+
+
+
+
