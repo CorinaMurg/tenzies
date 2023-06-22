@@ -6,9 +6,7 @@ import Die from "./Die"
 import './App.css'
 
 export default function App() {
-  // Ref for the first die
-  const firstDieRef = useRef(null);
-
+  const firstDieRef = useRef(null)
   const [dice, setDice] = useState(allNewDice())
   const [tenzies, setTenzies] = useState(false)
 
@@ -43,20 +41,16 @@ export default function App() {
             return die.isHeld ? 
                 die :
                 generateNewDie()
-        })) 
-
-        // Set the focus to the first die after a roll
-        firstDieRef.current.focus();
+        }))   
 
     } else {
         setTenzies(false)
         setDice(allNewDice())
-        // Set the focus to the first die after "New Game" roll
-        firstDieRef.current.focus();
     }
+    // Set the focus to the first die after a roll
+    firstDieRef.current.focus();
   }
   
-      
   function holdDice(id) {
       setDice(oldDice => oldDice.map(die => {
           return die.id === id ? 
@@ -87,6 +81,7 @@ export default function App() {
         <div className="dice-container">
             {diceElements}
         </div>
+      
         <button 
           className="roll-dice" 
           onClick={rollDice}

@@ -9,7 +9,7 @@ const Die = forwardRef((props, ref) => {
     }
     return (
         <button 
-            tabIndex="0"
+            tabIndex={props.isHeld ? -1 : 0 }
             aria-label={`Value of ${props.value}. ${props.isHeld ? "Frozen" : "Not frozen"}`}
             className="die-face" 
             style = {styles} 
