@@ -6,7 +6,7 @@ import './App.css'
 
 export default function App() {
   
-  const firstUnheldDieRef = useRef(null)
+  const firstDieRef = useRef(null)
   const [dice, setDice] = useState(allNewDice())
   const [tenzies, setTenzies] = useState(false)
 
@@ -36,29 +36,16 @@ export default function App() {
   }
 
   function rollDice() {
-    let firstUnheldFound = false;
-
-    setDice(oldDice => oldDice.map(die => {
-        if(!firstUnheldFound && !die.isHeld) {
-            firstUnheldFound = true;
-            return {
-                ...generateNewDie(),
-                isFirstUnheld: true,
-            };
-        } else {
-            return {
-                ...(die.isHeld ? die : {...generateNewDie(), isFirstUnheld: false}),
-            };
-        }
-    }));
-
-    if(firstUnheldDieRef.current) {
-        firstUnheldDieRef.current.focus();
+    if (!tenzies) {
+        setDice(prevDice => prevDice.map(die => {
+            return die.isHeld ? die : generateNewDie()
+        }))
+    } else {
+        setTenzies(false)
+        setDice(allNewDice())
     }
 
-    if(tenzies) {
-        setTenzies(false);
-    }
+    firstDieRef.current.focus()
   }
 
       
@@ -70,14 +57,13 @@ export default function App() {
       }))
   }
 
-  const diceElements = dice.map((die) => (
+  const diceElements = dice.map((die, index) => (
     <Die 
       key={die.id} 
       value={die.value} 
       isHeld={die.isHeld} 
       handleHold={() => holdDice(die.id)}
-      isFirstUnheld={die.isFirstUnheld}
-      ref={firstUnheldDieRef}
+      ref={index === 0 ? firstDieRef : null}
     />
   ))
   
