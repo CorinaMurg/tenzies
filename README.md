@@ -28,7 +28,7 @@ Here are the key technical aspects of the application:
 - `tabIndex` property to specify the tab order of an element 
 - `aria-label` to provide a text description for screen readers
 
-9. **Flexbox and CSS Grid** to layout the components on the screen and enables a responsive design.
+9. **Flexbox and CSS Grid** to layout the components on the screen and enable a responsive design.
 
 
 
