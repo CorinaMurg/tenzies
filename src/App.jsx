@@ -1,12 +1,15 @@
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, createRef } from 'react'
 import {nanoid} from "nanoid"
 import Confetti from "react-confetti"
 import Die from "./Die"
 import './App.css'
 
+
 export default function App() {
   const firstDieRef = useRef(null)
+  const diceRefs = Array.from({ length: 10 }, () => createRef());
+
   const [dice, setDice] = useState(allNewDice())
   const [tenzies, setTenzies] = useState(false)
 
@@ -32,6 +35,7 @@ export default function App() {
       for (let i = 0; i < 10; i++) {
           newDice.push(generateNewDie())
       }
+      
       return newDice
   }
 
@@ -42,13 +46,21 @@ export default function App() {
                 die :
                 generateNewDie()
         }))   
+        // Set the focus to the first unheld die after a roll
+        for(let i = 0; i < dice.length; i++) {
+          if(!dice[i].isHeld) {
+              diceRefs[i].current.focus();
+              break;
+          }
+        }
 
     } else {
         setTenzies(false)
         setDice(allNewDice())
+        // Set the focus to the first die at the start of a new game
+        firstDieRef.current.focus();
     }
-    // Set the focus to the first die after a roll
-    firstDieRef.current.focus();
+    
   }
   
   function holdDice(id) {
@@ -59,15 +71,20 @@ export default function App() {
       }))
   }
 
-  const diceElements = dice.map((die, index) => (
-    <Die 
-      key={die.id} 
-      value={die.value} 
-      isHeld={die.isHeld} 
-      handleHold={() => holdDice(die.id)}
-      ref={index === 0 ? firstDieRef : null}  // assign the ref to the first die
-    />
-  ))
+
+  const diceElements = dice.map((die, index) => {
+    const allUnheld = dice.every(die => !die.isHeld);
+    return (
+        <Die 
+            key={die.id} 
+            value={die.value} 
+            isHeld={die.isHeld} 
+            handleHold={() => holdDice(die.id)}
+            ref={allUnheld && index === 0 ? firstDieRef : diceRefs[index]}  
+        />
+    );
+  });
+
   
   return (
     <main>
