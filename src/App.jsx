@@ -46,6 +46,7 @@ export default function App() {
                 die :
                 generateNewDie()
         }))   
+        //WORKING!!!
         // Set the focus to the first unheld die after a roll
         for(let i = 0; i < dice.length; i++) {
           if(!dice[i].isHeld) {
@@ -57,11 +58,19 @@ export default function App() {
     } else {
         setTenzies(false)
         setDice(allNewDice())
+        //NOT WORKING. AFTER NEW GAME STARTS, FOCUS MOVES AT THE TOP OF THE BROWSER
         // Set the focus to the first die at the start of a new game
         firstDieRef.current.focus();
     }
-    
   }
+
+  // WORKS BUT IT FOCUSES ON FIRST DIE AT FIRST RENDER, SO SCREEN READER SKIPS TITLE + DESCRIPTION
+  // useEffect(() => {
+  //   if (tenzies === true) {
+  //     firstDieRef.current && firstDieRef.current.focus();
+  //   }
+  // }, [tenzies]);
+  
   
   function holdDice(id) {
       setDice(oldDice => oldDice.map(die => {
