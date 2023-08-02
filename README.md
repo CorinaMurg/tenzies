@@ -1,4 +1,4 @@
-FirstDieFocus BRANCH: 
+FirstDie BRANCH: 
 - aria-live after a win
 - focus on first die after a win
 - does not skip held dice
