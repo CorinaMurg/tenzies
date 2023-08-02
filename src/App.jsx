@@ -63,27 +63,11 @@ export default function App() {
     } else {
         setTenzies(false)
         setDice(allNewDice())
-        // In React, state updates are asynchronous. 
-        // This means when you call a function like setTenzies(false) or setDice(allNewDice()), 
-        // React doesn't immediately update the state and re-render the component. 
-        // Instead, it schedules the update to be processed later on, and it batches multiple 
-        // updates together for performance reasons. Because of this, if you try to interact 
-        // with the DOM immediately after scheduling a state update 
-        // (like calling newGameRef.current.focus() right after setTenzies(false) and 
-        // setDice(allNewDice())), the DOM may not have been updated yet to reflect the new state. 
-        // In this case, the "New Game" button might not be ready to accept focus.
-        // NOT WORKING HERE, MOVE INSIDE useEffect
-        // newGameRef.current.focus();
     }
   }
   
   useEffect(() => {
     if (tenzies) {
-        // To ensure the DOM has been updated, use it inside the useEffect hook. 
-        // useEffect allows us to run side effects (like setting focus to a DOM element) 
-        // in response to changes in our component's state or props. Inside a useEffect hook,
-        // with tenzies as a dependency, we're telling React to run that code after it has 
-        // processed any updates to tenzies and re-rendered the component.
         // SEND FOCUS TO BUTTON
         newGameRef.current.focus();
     } else if (hasStarted) {
