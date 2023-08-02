@@ -1,3 +1,11 @@
+MAIN BRANCH: 
+- aria-live after a win
+- focus on first die after a win
+- does not skip held dice
+- does not focus on button after win
+
+
+
 In order to create the Teanzies app, I utilized a variety of modern web development techniques and 
 React features to create an interactive and accessible dice game.
 
