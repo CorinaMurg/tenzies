@@ -1,6 +1,7 @@
 MAIN BRANCH: 
+(using just 5 dice for faster testing)
 - aria-live after a win
-- focus on first UNHELD die after a win (different from main branch)
+- focus on first UNHELD die after a win
 - SKIPS held dice (different from main branch, same as skipHeldDie)
 - DOES SEND FOCUS on button after win
 
