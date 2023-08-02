@@ -9,7 +9,9 @@ import './App.css'
 export default function App() {
   // the roll button has been clicked
   const [hasStarted, setHasStarted] = useState(false);
+  //ref for first die; used at the start of a new game
   const firstDieRef = useRef(null)
+  //array of refs, with one ref for each die
   const diceRefs = Array.from({ length: 10 }, () => createRef());
 
   const [dice, setDice] = useState(allNewDice())
@@ -37,7 +39,6 @@ export default function App() {
       for (let i = 0; i < 10; i++) {
           newDice.push(generateNewDie())
       }
-      
       return newDice
   }
 
@@ -49,7 +50,7 @@ export default function App() {
                 die :
                 generateNewDie()
         }))   
-        // Set the focus to the first unheld die after a roll
+        // after a roll, send focus to first unheld die 
         for(let i = 0; i < dice.length; i++) {
           if(!dice[i].isHeld) {
               diceRefs[i].current.focus();
@@ -76,7 +77,6 @@ export default function App() {
               die
       }))
   }
-
 
   const diceElements = dice.map((die, index) => {
     const allUnheld = dice.every(die => !die.isHeld);
