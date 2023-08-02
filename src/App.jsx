@@ -14,7 +14,7 @@ export default function App() {
   //ref for first die; used at the start of a new game (but NOT at initial render)
   const firstDieRef = useRef(null)
   //array of refs, with one ref for each die
-  const diceRefs = Array.from({ length: 10 }, () => createRef());
+  const diceRefs = Array.from({ length: 5 }, () => createRef());
 
   const [dice, setDice] = useState(allNewDice())
   const [tenzies, setTenzies] = useState(false)
@@ -38,7 +38,7 @@ export default function App() {
   
   function allNewDice() {
       const newDice = []
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 5; i++) {
           newDice.push(generateNewDie())
       }
       return newDice
