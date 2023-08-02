@@ -7,9 +7,11 @@ import './App.css'
 
 
 export default function App() {
-  // the roll button has been clicked
+
+  const newGameRef = useRef(null)
+  // the roll button has been clicked at least once
   const [hasStarted, setHasStarted] = useState(false);
-  //ref for first die; used at the start of a new game
+  //ref for first die; used at the start of a new game (but NOT at initial render)
   const firstDieRef = useRef(null)
   //array of refs, with one ref for each die
   const diceRefs = Array.from({ length: 10 }, () => createRef());
@@ -62,6 +64,7 @@ export default function App() {
         setTenzies(false)
         setDice(allNewDice())
         // send focus to button
+        newGameRef.current.focus();
     }
   }
   
@@ -109,6 +112,7 @@ export default function App() {
         <button 
           className="roll-dice" 
           onClick={rollDice}
+          ref={newGameRef}
         >
             {tenzies ? "New Game" : "Roll"}
         </button>
