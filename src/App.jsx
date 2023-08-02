@@ -9,7 +9,7 @@ import './App.css'
 export default function App() {
 
   const newGameRef = useRef(null)
-  // the roll button has been clicked at least once
+  // state for "roll button has been clicked at least once"
   const [hasStarted, setHasStarted] = useState(false);
   //ref for first die; used at the start of a new game (but NOT at initial render)
   const firstDieRef = useRef(null)
@@ -93,6 +93,7 @@ export default function App() {
             value={die.value} 
             isHeld={die.isHeld} 
             handleHold={() => holdDice(die.id)}
+            // assign one of the refs
             ref={allUnheld && index === 0 ? firstDieRef : diceRefs[index]}  
         />
     );
