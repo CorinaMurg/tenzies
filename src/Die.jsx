@@ -9,6 +9,7 @@ const Die = forwardRef((props, ref) => {
     }
     return (
         <button 
+            // change so keyboard user can undo holding a die
             tabIndex={props.isHeld ? -1 : 0 }
             aria-label={`Value of ${props.value}. ${props.isHeld ? "Frozen" : "Not frozen"}`}
             className="die-face" 

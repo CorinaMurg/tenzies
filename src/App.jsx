@@ -61,6 +61,7 @@ export default function App() {
     } else {
         setTenzies(false)
         setDice(allNewDice())
+        // send focus to button
     }
   }
   
