@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef, createRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {nanoid} from "nanoid"
 import Confetti from "react-confetti"
 import Die from "./Die"
@@ -8,14 +8,8 @@ import './App.css'
 
 export default function App() {
 
-  const newGameRef = useRef(null)
-  // state for "roll button has been clicked at least once"
-  const [hasStarted, setHasStarted] = useState(false);
-  //ref for first die; used at the start of a new game (but NOT at initial render)
-  const firstDieRef = useRef(null)
-  //array of refs, with one ref for each die
-  const diceRefs = Array.from({ length: 5 }, () => createRef());
-
+  const buttonFocusRef = useRef(null)
+  
   const [dice, setDice] = useState(allNewDice())
   const [tenzies, setTenzies] = useState(false)
 
@@ -45,81 +39,79 @@ export default function App() {
   }
 
   function rollDice() {
-    setHasStarted(true);
-    if(!tenzies) {
-        setDice(oldDice => oldDice.map(die => {
-            return die.isHeld ? 
-                die :
-                generateNewDie()
-        }))   
-        // after a roll, send focus to first unheld die 
-        for(let i = 0; i < dice.length; i++) {
-          if(!dice[i].isHeld) {
-              diceRefs[i].current.focus();
-              break;
-          }
-        }
-
+    if (!tenzies) {
+      setDice((oldDice) =>
+        oldDice.map((die) => (die.isHeld ? die : generateNewDie()))
+      );
     } else {
-        setTenzies(false)
-        setDice(allNewDice())
+      setTenzies(false);
+      setDice(allNewDice());
     }
+
+    buttonFocusRef.current.focus();
   }
   
   useEffect(() => {
     if (tenzies) {
-        // SEND FOCUS TO BUTTON
-        newGameRef.current.focus();
-    } else if (hasStarted) {
-        // send focus to first die when roll is clicked
-        firstDieRef.current && firstDieRef.current.focus();
-    }
-  }, [tenzies, hasStarted]);
+      buttonFocusRef.current.focus();
+    } 
+    
+  }, [tenzies]);
 
-  
+
   function holdDice(id) {
-      setDice(oldDice => oldDice.map(die => {
-          return die.id === id ? 
-              {...die, isHeld: !die.isHeld} :
-              die
-      }))
+    setDice(oldDice => oldDice.map(die => {
+        // if die already held, unhold it 
+        if (die.isHeld && die.id === id) {
+            return {...die, isHeld: false}
+        }
+        // if die not held, only hold it if there are no dice held 
+        // or all held dice have the same value as this die
+        else if (!die.isHeld && die.id === id) {
+            const heldDiceValues = oldDice.filter(d => d.isHeld).map(d => d.value);
+            if (heldDiceValues.length === 0 || heldDiceValues.every(val => val === die.value)) {
+                return {...die, isHeld: true}
+            }
+        }
+        return die;
+    }))
   }
 
-  const diceElements = dice.map((die, index) => {
-    const allUnheld = dice.every(die => !die.isHeld);
+
+  const diceElements = dice.map((die) => {
     return (
         <Die 
             key={die.id} 
             value={die.value} 
             isHeld={die.isHeld} 
             handleHold={() => holdDice(die.id)}
-            // assign one of the refs
-            ref={allUnheld && index === 0 ? firstDieRef : diceRefs[index]}  
         />
     );
   });
 
-  
+  const congrats = "Congratulations, you won! Roll to play again.";
+
   return (
     <main>
-        {tenzies && <Confetti />}
-        <div aria-live="polite" className="visually-hidden">{tenzies ? "Congratulations, you won! Roll to play again" : ""}</div>
-        <h1 className="title" tabIndex="0">Tenzies</h1>
-        <p className="instructions" tabIndex="0">
-          Roll until all dice are the same. 
-          Click each die to freeze it at its current value between rolls.
-        </p>
-        <div className="dice-container">
-            {diceElements}
-        </div>
-      
-        <button 
-          className="roll-dice" 
-          onClick={rollDice}
-          ref={newGameRef}
-        >
-            {tenzies ? "New Game" : "Roll"}
-        </button>
+      {tenzies && <h3 className="congrats">{congrats}</h3>}
+      <div aria-live="polite" className="visually-hidden">{tenzies ? congrats : ""}</div>
+      {tenzies && <Confetti />}
+      <h1 className="title">Tenzies</h1>
+      <p className="instructions">
+        Roll until all dice are the same. 
+        Click each die to freeze it at its current value between rolls.
+      </p>
+      <div className="dice-container">
+        {diceElements}
+      </div>
+    
+      <button 
+        className="roll-dice" 
+        onClick={rollDice}
+        ref={buttonFocusRef}
+      >
+        {tenzies ? "New Game" : "Roll"}
+      </button>
     </main>
   )
 }
