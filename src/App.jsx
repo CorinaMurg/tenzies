@@ -47,7 +47,6 @@ export default function App() {
       setTenzies(false);
       setDice(allNewDice());
     }
-
     buttonFocusRef.current.focus();
   }
   

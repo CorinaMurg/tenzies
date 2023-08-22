@@ -2,10 +2,7 @@
 /* eslint-disable react/prop-types */
 
 
-// REMOVE REF IF NO NEED FOR FOCUS ON FIRST DIE
-import { forwardRef } from 'react';
-
-const Die = forwardRef((props, ref) => {
+const Die = (props) => {
     const styles = {
         backgroundColor: props.isHeld ? "#FCBA28" : "white"
     }
@@ -16,12 +13,11 @@ const Die = forwardRef((props, ref) => {
             className="die-face" 
             style = {styles} 
             onClick={props.handleHold}
-            ref={ref}
         >
             <h2 className="die-num">{props.value}</h2>
         </button>
     )
-})
+}
 
 export default Die;
 
