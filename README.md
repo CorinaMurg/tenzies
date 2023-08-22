@@ -1,9 +1,11 @@
 MAIN BRANCH: 
 (using just 5 dice for faster testing)
-- aria-live after a win
-- focus on first UNHELD die after a win
-- SKIPS held dice (different from main branch, same as skipHeldDie)
-- DOES SEND FOCUS on button after win
+- congrats text
+- aria-live after a win linked to congrats text
+- focus goes to first die at initial render
+- SKIPS frozen dice 
+- prevents freeze unless value = value of other frozen dice
+- focus returns to button after win and during play
 
 
 
